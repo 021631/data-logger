@@ -1,9 +1,10 @@
 import configparser
+from credentials import Credentials
 
 
 class Config:
     def __init__(self):
-        self.config_file = '/var/www/upload/data_logger/config/config.ini'
+        self.config_file = Credentials.config_path
         self.config = configparser.ConfigParser()
         self.scale_section = "SCALE"
 

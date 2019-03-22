@@ -1,6 +1,7 @@
 import requests
 import configparser
 from main.logging_activity import Log
+from credentials import Credentials
 
 
 class SamsApi:
@@ -8,8 +9,8 @@ class SamsApi:
         self.config = configparser.ConfigParser()
         self.token_config = configparser.ConfigParser()
         self.log = Log()
-        self.config_file = '/boot/credentials.ini'
-        self.token_config_file = '/var/www/upload/data_logger/config/config.ini'
+        self.config_file = Credentials.credentials_path
+        self.token_config_file = Credentials.config_path
         self.config.read(self.config_file)
         self.secret_data = self.config['DEFAULT']
         self.client_id = self.secret_data['client_id']

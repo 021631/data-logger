@@ -3,11 +3,12 @@ import os
 import time
 from api_plugin.sams_science import SamsApi
 from main.logging_activity import Log
+from credentials import Credentials
 
 
 class LogData:
     def __init__(self):
-        self.path = '/var/www/upload/data_logger/log/'
+        self.path = Credentials.log_path
         self.api = SamsApi()
         self.status = []
         self.files = os.listdir(self.path)

@@ -24,18 +24,20 @@ class Application:
         self.dataset = ""
 
     def take_dataset(self):
-        self.dataset[:] = []  # empty the dataset before take new data
+        self.dataset = ""  # empty the dataset before take new data
         self.dataset = self.data.get_dataset()
 
     def start(self):
         print("starting")
         while True:
+            print("in der while")
             try:
                 while not self.dataset_taken:
+                    print("in der anderen while...")
                     self.log.write_log("take dataset...")
-                    print("take dataset")
-                    self.dataset_taken_counter += 1
                     print(self.dataset_taken_counter)
+                    time.sleep(20)
+                    self.dataset_taken_counter += 1
                     self.take_dataset()
                     if self.dataset_taken_counter == 3:
                         self.log.write_log("to many failed datasets - reboot!")
@@ -43,9 +45,12 @@ class Application:
 
                     if not self.dataset:
                         self.dataset_taken = False
+                        print("dataset not taken")
                         self.log.write_log("dataset not taken - times {}".format(self.dataset_taken_counter))
                     else:
+                        print("dataset taken")
                         self.dataset_taken = True
+                    time.sleep(5)
                 # if stored data (/log/*.json) available, then try to send this data to the data warehouse
                 if self.log_data.has_log_files():
                     self.log.write_log("has log files...")
@@ -71,6 +76,7 @@ class Application:
                 self.dataset_taken = False
                 time.sleep(int(self.app_wait_time))  # sleep X seconds before collecting the new data
             except Exception as e:
+                print(e)
                 self.log.write_log(e)
 
 
