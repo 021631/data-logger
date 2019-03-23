@@ -50,6 +50,7 @@ class Application:
                     else:
                         print("dataset taken")
                         self.dataset_taken = True
+                        self.dataset_taken_counter = 0
                     time.sleep(5)
                 # if stored data (/log/*.json) available, then try to send this data to the data warehouse
                 if self.log_data.has_log_files():
