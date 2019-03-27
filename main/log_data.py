@@ -47,18 +47,17 @@ class LogData:
 
     def post_log_files(self, dataset):
         try:
-            self.log.write_log("log dataset...")
+            self.log.write_log("post log files")
             self.insert(dataset)
             while self.has_log_files():
                 self.list_dir()
                 for x in self.files:
                     file = self.read_file(self.path + str(x))
-                    self.log.write_log("try to post data")
                     if self.api.call(file) == 200:
-                        self.log.write_log("status code ok! Delete file...")
+                        self.log.write_log("status code ok! Delete file")
                         os.remove(self.path + str(x))
                     if self.api.call(file) == 500:
-                        self.log.write_log("File corrupted! Delete file...")
+                        self.log.write_log("File corrupted! Delete file")
                         os.remove(self.path + str(x))
                     time.sleep(5)
             return True

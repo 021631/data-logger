@@ -72,7 +72,7 @@ class SamsApi:
                 return second_call
             else:
                 self.log.write_log("send to api failed! Status code: {0}".format(second_call))
-                return False
+                return second_call
         elif api_call == 200:
             return api_call
         else:

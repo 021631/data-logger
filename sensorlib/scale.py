@@ -1,8 +1,6 @@
 import RPi.GPIO as GPIO
 from sensorlib.hx711 import HX711
 from config.config import Config
-from numpy import median
-import time
 
 
 class Scale:
@@ -25,40 +23,23 @@ class Scale:
         try:
             self.offset = self.hx.read_average()
             self.hx.set_offset(self.offset)
-            return True
+            print("offset: {}".format(self.offset))
         except Exception as e:
-           return False
-
-    def has_error(self):
-        value_list = []
-        try:
-            for x in range(15):
-                self.hx.power_up()
-                value_list.append(self.hx.get_grams())
-                self.hx.power_down()
-                time.sleep(0.1)
-
-            print(value_list)
-            median_val = median(value_list)
-            print(median_val)
-            if value_list[3] == median_val:
-                return True
-            else:
-                return False
-
-        except:
-            return True
+            print("Scale or HX711 connected? : {0}".format(e))
 
     def calibrate(self, weight):
         try:
             self.value = int(weight)
             measured_weight = (self.hx.read_average() - self.hx.get_offset())
+            print("measured weight: {}".format(measured_weight))
             self.ratio = int(measured_weight) / self.value
+            print("offset: {}".format(self.offset))
+            print("ratio: {}".format(self.ratio))
             self.hx.set_scale(self.ratio)
             self.config.set_scale(ratio=self.ratio, offset=self.hx.get_offset(), calibrated=1)
-            return True
         except ValueError:
-            return False
+            print('Expected integer or float and I have got: '
+                  + str(weight))
 
     def get_data(self):
         try:
@@ -68,7 +49,7 @@ class Scale:
             self.hx.power_down()
             return measure_weight
         except Exception as e:
-            pass
+            print("Scale or HX711 connected? : {0}".format(e))
 
     def calibrated(self):
         self.is_calibrated = self.config_data['SCALE'].getboolean("calibrated")
