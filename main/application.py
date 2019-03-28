@@ -36,11 +36,13 @@ class Application:
                 self.red.on()
                 time.sleep(.5)
                 self.red.off()
+                time.sleep(.5)
         if color == "green":
             for x in range(3):
-                self.red.on()
+                self.green.on()
                 time.sleep(2)
-                self.red.off()
+                self.green.off()
+                time.sleep(2)
 
     def start(self):
         while True:
