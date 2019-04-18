@@ -7,4 +7,5 @@
 ### 1.1.1
 * added second api to log error into the database
 
- 
+### 1.1.2
+* remove median from scale dataset (default from scale measured 16 times)

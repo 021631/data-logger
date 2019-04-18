@@ -12,3 +12,5 @@ app = Application()
 if __name__ == '__main__':
     if is_calibrated:
         app.start()
+    else:
+        print("please calibrate the scale...")

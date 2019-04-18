@@ -113,7 +113,6 @@ class Dataset:
         except Exception as e:
             self.error("audio", e)
 
-
         return True
 
     def get_ds18b20_data(self):
@@ -133,6 +132,7 @@ class Dataset:
 
                     if len(self.ds_temp) != 0:
                         self.median_ds_temp = median(self.ds_temp)
+                        # empty dataset
                         del self.ds_temp[:]
                         self.dataset.append(
                             {
@@ -184,6 +184,7 @@ class Dataset:
                 }
             )
 
+            # empty dataset
             del self.temp[:]
             del self.hum[:]
 
@@ -192,21 +193,13 @@ class Dataset:
 
     def get_scale_data(self):
         try:
-            for i in range(self.median_interval):
-                self.weight.append(self.scale.get_data())
-                print(self.weight)
-                time.sleep(self.wait_time)
-
-            self.median_weight = median(self.weight)
-
-            del self.weight[:]
             self.dataset.append(
                 {
                     "sourceId": "scale-{0}".format(self.api.client_id),
                     "values": [
                         {
                             "ts": self.get_time(),
-                            "value": float(self.median_weight)
+                            "value": self.scale.get_data()
                         }
                     ]
                 }

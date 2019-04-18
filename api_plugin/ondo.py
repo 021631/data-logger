@@ -19,6 +19,5 @@ class OndoApi:
             r = requests.post(
                 "{0}?id={1}&message={2}&key={3}".format(Credentials.ondo_path, self.client_id, message,
                                                         self.apikey))
-            print(r)
         except Exception as e:
             print("ondo failed: {}".format(e))
