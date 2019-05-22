@@ -3,7 +3,7 @@ import sounddevice as sd
 import scipy.io.wavfile
 from sensorlib.scale import Scale
 from sensorlib.dht22 import DHT22
-from sensorlib.ds1820 import DS18B20
+from sensorlib.temp import DS18B20
 from config.config import Config
 from api_plugin.sams_science import SamsApi
 from main.logging_activity import Log
@@ -25,11 +25,6 @@ class Dataset:
             self.scale = Scale()
         except Exception as e:
             self.log.write_log("Failed to initialize scale: {}".format(e))
-
-        try:
-            self.DS18B20 = DS18B20()
-        except Exception as e:
-            self.log.write_log("Failed to initialize DS18B20: {}".format(e))
 
         self.api = SamsApi()
         self.log = Log()
@@ -114,41 +109,6 @@ class Dataset:
             self.error("audio", e)
 
         return True
-
-    def get_ds18b20_data(self):
-        sensor_counter = self.DS18B20.device_count()
-        try:
-            if sensor_counter != 0:
-                for x in range(sensor_counter):
-                    self.median_ds_temp = []
-                    for i in range(self.median_interval):
-                        value = self.DS18B20.tempC(x)
-                        if value == 998 or value == 85.0:
-                            self.log.write_log(
-                                "DS18B20 does not work properly...")
-                        else:
-                            self.ds_temp.append(self.DS18B20.tempC(x))
-                            time.sleep(self.wait_time)
-
-                    if len(self.ds_temp) != 0:
-                        self.median_ds_temp = median(self.ds_temp)
-                        # empty dataset
-                        del self.ds_temp[:]
-                        self.dataset.append(
-                            {
-                                "sourceId": "dsb18b20-{0}-{1}".format(x, self.api.client_id),
-                                "values": [
-                                    {
-                                        "ts": self.get_time(),
-                                        "value": float(self.median_ds_temp)
-                                    },
-                                ]
-                            }
-                        )
-                        self.median_ds_temp = ""
-
-        except Exception as e:
-            self.error("ds18b20", e)
 
     def get_dht22_data(self):
         try:

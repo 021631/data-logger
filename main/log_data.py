@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import time
 from api_plugin.sams_science import SamsApi
 from main.logging_activity import Log
@@ -13,6 +14,7 @@ class LogData:
         self.status = []
         self.files = os.listdir(self.path)
         self.log = Log()
+        self.fail_counter = 0
 
     def insert(self, json_data):
         files = os.listdir(self.path)
@@ -40,10 +42,10 @@ class LogData:
         return data
 
     def has_log_files(self):
-        if not os.listdir(self.path):
-            return False
-        else:
+        if os.listdir(self.path):
             return True
+        else:
+            return False
 
     def post_log_files(self, dataset):
         try:
@@ -59,9 +61,15 @@ class LogData:
                     if self.api.call(file) == 500:
                         self.log.write_log("File corrupted! Delete file")
                         os.remove(self.path + str(x))
+                        self.fail_counter += 1
+                        self.log.write_log("Fail counter: {}".format(self.fail_counter))
+                        if self.fail_counter == 3:
+                            self.log.write_log("too many corrupted files.. restarting System")
+                            restart = subprocess.Popen(["sudo", "reboot"], stdout=subprocess.PIPE)
+                            output = restart.communicate()[0]
+                            self.log.write_log("{0}".format(output))
                     time.sleep(5)
             return True
 
         except Exception as e:
-            print(e)
             self.log.write_log(e)

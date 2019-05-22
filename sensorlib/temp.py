@@ -6,7 +6,7 @@ import glob
 import time
 
 
-class DS18B20:
+class Temp:
     # much of this code is lifted from Adafruit web site
     # This class can be used to access one or more DS18B20 temperature sensors
     # It uses OS supplied drivers and one wire support must be enabled
