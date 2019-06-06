@@ -60,7 +60,7 @@ class Dataset:
             self.dataset.append(
                 {
                     "sourceId": "{0}-{1}".format(device, self.api.client_id),
-                    "value": [
+                    "values": [
                         {
                             "ts": self.get_time(),
                             "value": 0
