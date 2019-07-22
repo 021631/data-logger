@@ -5,3 +5,10 @@ Summarized, SAMS addresses requirements of end-user communities on beekeeping in
 SAMS increases production of bee products, creates jobs (particularly youths/ women), triggers investments and establishes knowledge exchange through networks. SAMS results are of major interest for stakeholder along the whole value chain of honey production. By cooperation with other networks, SAMS technology will be promoted worldwide to beekeepers as well as data beneficiaries.
 
 This software can only be used in conjunction with a specially configured Raspbian Stretch Image (https://www.raspberrypi.org). (More information and a link will follow later)
+
+
+### Thanks to:
+
+- https://github.com/RogerWoollett (DS18B20)
+- https://github.com/adafruit/Adafruit_Python_DHT (DHT22)
+- https://github.com/JGUINO/3189-capteurs-pressions (HX711)
