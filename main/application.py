@@ -3,9 +3,7 @@ from config.config import Config
 from main.dataset import Dataset
 from main.log_data import LogData
 from main.logging_activity import Log
-from sensorlib.gpio import Device
 import time
-import os
 
 
 class Application:
@@ -20,8 +18,6 @@ class Application:
         self.app_wait_time = int(self.config_data['INTERVAL']['app_wait_seconds'])
         self.dataset_taken = False
         self.dataset_taken_counter = 0
-        self.green = Device(26, "led")
-        self.red = Device(16, "led")
 
         self.data = Dataset()  # collect all the data from sensors
         self.dataset = ""
@@ -30,26 +26,11 @@ class Application:
         self.dataset = ""  # empty the dataset before take new data
         self.dataset = self.data.get_dataset()
 
-    def blink(self, color):
-        if color == "red":
-            for x in range(3):
-                self.red.on()
-                time.sleep(.5)
-                self.red.off()
-                time.sleep(.5)
-        if color == "green":
-            for x in range(3):
-                self.green.on()
-                time.sleep(2)
-                self.green.off()
-                time.sleep(2)
-
     def start(self):
         while True:
             try:
                 self.log.write_log("take dataset")
                 self.take_dataset()
-                self.blink("red")
                 # if stored data (/log/*.json) available, then try to send this data to the data warehouse
                 if self.log_data.has_log_files():
                     self.log.write_log("has log files")
@@ -60,7 +41,6 @@ class Application:
                     # try to post data. If api status is 200 then everything is right
                     if response == 200:
                         self.log.write_log("dataset posted")
-                        self.blink("green")
                     # if no internet connection or the api do not allow to send, then store the data
                     # if the status code from api is 500 then the log function will delete the file
                     else:

@@ -9,3 +9,4 @@
 
 ### 1.1.2
 * remove median from scale dataset (default from scale measured 16 times)
+* bugfix dataset errors
